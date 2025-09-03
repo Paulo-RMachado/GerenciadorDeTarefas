@@ -19,21 +19,21 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-        server-id: github 
-        settings-path: ${{ github.workspace }} 
-        
+        server-id: github
+        settings-path: ${{ github.workspace }}
+
     - name: Set Version from Release Tag
       run: |
-        # Extrai a tag do release (ex: v1.0.0) e remove o 'v' inicial
         RELEASE_VERSION=${{ github.ref_name }}
         echo "VERSION=${RELEASE_VERSION#v}" >> $GITHUB_ENV
-
-    - name: Build and Publish with Maven
-      run: >
-        mvn -B deploy
-        -s $GITHUB_WORKSPACE/settings.xml
-        -Dspring.datasource.url=${{ secrets.DB_URL }}
-        -Dspring.datasource.username=${{ secrets.DB_USERNAME }}
-        -Dspring.datasource.password=${{ secrets.DB_PASSWORD }}
+        
+    - name: Update POM version and Publish
+      run: |
+        mvn -B versions:set -DnewVersion=${{ env.VERSION }}
+        mvn -B deploy \
+          -s $GITHUB_WORKSPACE/settings.xml \
+          -Dspring.datasource.url=${{ secrets.DB_URL }} \
+          -Dspring.datasource.username=${{ secrets.DB_USERNAME }} \
+          -Dspring.datasource.password=${{ secrets.DB_PASSWORD }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
