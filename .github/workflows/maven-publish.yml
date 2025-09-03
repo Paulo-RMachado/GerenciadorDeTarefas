@@ -21,6 +21,12 @@ jobs:
         distribution: 'temurin'
         server-id: github 
         settings-path: ${{ github.workspace }} 
+        
+    - name: Set Version from Release Tag
+      run: |
+        # Extrai a tag do release (ex: v1.0.0) e remove o 'v' inicial
+        RELEASE_VERSION=${{ github.ref_name }}
+        echo "VERSION=${RELEASE_VERSION#v}" >> $GITHUB_ENV
 
     - name: Build and Publish with Maven
       run: >
