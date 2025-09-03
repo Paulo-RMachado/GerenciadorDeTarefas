@@ -125,5 +125,11 @@
             </plugin>
         </plugins>
     </build>
-
+<distributionManagement>
+  <repository>
+    <id>github</id>
+    <name>Gerenciador de Tarefas</name>
+    <url>https://maven.pkg.github.com/Paulo-RMachado/GerenciadorDeTarefas</url>
+  </repository>
+</distributionManagement>
 </project>
